@@ -1,6 +1,6 @@
 gsap.to(".header_content", {
     borderRadius: "3rem", // Adjust to your desired value
-    scale: 0.94,
+    scale: 0.95,
     scrollTrigger: {
       trigger: ".header_content",
       start: "top top", // Animation starts when the top of the hero reaches the top of the viewport
