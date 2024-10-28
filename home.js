@@ -1,14 +1,14 @@
 //Hero header scale down and border radius on scroll
-gsap.to(".header_content", {
-    borderRadius: "3rem", // Adjust to your desired value
-    scale: 0.95,
-    scrollTrigger: {
-      trigger: ".header_content",
-      start: "top top", // Animation starts when the top of the hero reaches the top of the viewport
-      end: "bottom top", // Animation ends when the bottom of the hero reaches the top of the viewport
-      scrub: true, // Smooth animation linked to scroll
-    }
-  });
+//gsap.to(".header_content", {
+//    borderRadius: "3rem", // Adjust to your desired value
+//    scale: 0.95,
+//    scrollTrigger: {
+//      trigger: ".header_content",
+//      start: "top top", // Animation starts when the top of the hero reaches the top of the viewport
+ //     end: "bottom top", // Animation ends when the bottom of the hero reaches the top of the viewport
+//      scrub: true, // Smooth animation linked to scroll
+ //   }
+//  });
 
   gsap.to(".header_image", {
     y: "4rem",

@@ -31,35 +31,36 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Footer mask animation
-document.addEventListener('DOMContentLoaded', function() {
-  const footer = document.querySelector('.footer');
-  const footerMask = document.querySelector('.footer_mask');
+// Footer mask animation that scales and changes border radius as user scrolls
+// Get footer and footer mask elements
+// const footer = document.querySelector('.footer');
+// const footerMask = document.querySelector('.footer_mask');
 
-  if (footer && footerMask) {
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: footer,
-        start: "top bottom",
-        end: "top top",
-        scrub: true,
-        // markers: false, // Uncomment for debugging
-      }
-    })
-    .fromTo(footerMask, 
-      {
-        scale: 0.95,
-        borderRadius: "3rem"
-      },
-      {
-        scale: 1,
-        borderRadius: "0rem",
-        ease: "none"
-      }
-    );
-  } else {
-    console.warn('Footer or footer_mask element not found');
-  }
-});
+// If both elements exist, create GSAP timeline animation
+// if (footer && footerMask) {
+//   gsap.timeline({
+//     scrollTrigger: {
+//       trigger: footer,          // Trigger animation on footer element
+//       start: "top bottom",      // Start when footer top hits viewport bottom
+//       end: "top top",          // End when footer top hits viewport top
+//       scrub: true,             // Smooth animation with scroll
+//       // markers: false,        // Uncomment for debugging
+//     }
+//   })
+//   .fromTo(footerMask,          // Animate the footer mask
+//     {
+//       scale: 0.95,             // Start slightly scaled down
+//       borderRadius: "3rem"      // Start with rounded corners
+//     },
+//     {
+//       scale: 1,                // Scale to full size
+//       borderRadius: "0rem",     // Remove rounded corners
+//       ease: "none"             // Linear animation
+//     }
+//   );
+// } else {
+//   console.warn('Footer or footer_mask element not found');
+// }
 
 // Fade in elements with class 'fade-in-element' as they scroll into view
 gsap.utils.toArray('.fade-in-element').forEach(element => {
