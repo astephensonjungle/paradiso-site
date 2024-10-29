@@ -11,7 +11,7 @@
 //  });
 
   gsap.to(".header_image", {
-    y: "4rem",
+    y: "12rem",
     scrollTrigger: {
       trigger: ".header_content",
       start: "top top", // Animation starts when the top of the hero reaches the top of the viewport
@@ -19,6 +19,7 @@
       scrub: true, // Smooth animation linked to scroll
     }
   });
+  
   
 //Hero image on load
 document.addEventListener("DOMContentLoaded", function() {
@@ -90,3 +91,14 @@ gsap.timeline({
   }
 });
 console.log('home.js is fully loaded');
+
+// Infinite scroll animation for scroller_content
+gsap.to(".scroller_content", {
+  x: "-75vw", // Move 100vw left
+  repeat: -1, // Infinite repeat
+  duration: 10, // Adjust duration as needed
+  ease: "none", // Linear movement
+  onRepeat: () => {
+    gsap.set(".scroller_content", {x: 0}); // Reset position to start
+  }
+});
