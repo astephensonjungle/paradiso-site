@@ -11,7 +11,7 @@
 //  });
 
   gsap.to(".header_image", {
-    y: "12rem",
+    y: "75vh",
     scrollTrigger: {
       trigger: ".header_content",
       start: "top top", // Animation starts when the top of the hero reaches the top of the viewport
@@ -93,12 +93,69 @@ gsap.timeline({
 console.log('home.js is fully loaded');
 
 // Infinite scroll animation for scroller_content
-gsap.to(".scroller_content", {
-  x: "-75vw", // Move 100vw left
+gsap.to(".scroller_content.is_wide", {
+  x: "-100vw", // Move 100vw left
+  repeat: -1, // Infinite repeat
+  duration: 10, // Adjust duration as needed
+  ease: "none", // Linear movement
+  onRepeat: () => {
+    gsap.set(".scroller_content.is_wide", {x: 0}); // Reset position to start
+  }
+});
+
+gsap.to(".scroller_content.is_small", {
+  x: "-50vw", // Move 100vw left
   repeat: -1, // Infinite repeat
   duration: 10, // Adjust duration as needed
   ease: "none", // Linear movement
   onRepeat: () => {
     gsap.set(".scroller_content", {x: 0}); // Reset position to start
   }
+});
+
+// Make sure DOM is loaded before adding event listeners
+document.addEventListener("DOMContentLoaded", () => {
+  // Select all parent elements
+  const parents = document.querySelectorAll(".landing_list_item");
+
+  // Add console.log to check if parent elements are found
+  console.log("Parent elements found:", parents.length);
+
+  // Create a timeline for each parent
+  parents.forEach((parent, index) => {
+    // Create a unique GSAP timeline for each parent
+    const tl = gsap.timeline({ paused: true, repeat: -1 });
+    
+    // Create a timeline for title block
+    const titleTl = gsap.timeline({ paused: true });
+
+    // Get the images within this specific parent
+    const images = parent.querySelectorAll(".image2, .image3, .image1");
+    
+    // Get the title block for this parent
+    const titleBlock = parent.querySelector(".work_title_block");
+
+    // Build timeline for this parent's images
+    images.forEach((image, i) => {
+      tl.to(image, { opacity: 1, duration: 0 }) // show image
+        .to(image, { opacity: 0, duration: 0, delay: 0.6 }); // hide image after delay
+    });
+
+    // Build timeline for title block
+    titleTl.to(titleBlock, { opacity: 1, duration: 0 })
+           .to(titleBlock, { rotation: -20, duration: 0.4, ease: "power4.out" });
+
+    // Add hover event listeners to this parent element
+    parent.addEventListener("mouseenter", () => {
+      console.log(`Mouse enter parent ${index} - playing timeline`);
+      tl.play();
+      titleTl.play();
+    });
+
+    parent.addEventListener("mouseleave", () => {
+      console.log(`Mouse leave parent ${index} - resetting timeline`);
+      tl.pause(0);
+      titleTl.reverse();
+    });
+  });
 });
