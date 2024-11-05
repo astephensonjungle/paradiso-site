@@ -11,7 +11,7 @@
 //  });
 
   gsap.to(".header_image", {
-    y: "75vh",
+    y: "50vh",
     scrollTrigger: {
       trigger: ".header_content",
       start: "top top", // Animation starts when the top of the hero reaches the top of the viewport
@@ -115,47 +115,68 @@ gsap.to(".scroller_content.is_small", {
 
 // Make sure DOM is loaded before adding event listeners
 document.addEventListener("DOMContentLoaded", () => {
-  // Select all parent elements
-  const parents = document.querySelectorAll(".landing_list_item");
-
-  // Add console.log to check if parent elements are found
-  console.log("Parent elements found:", parents.length);
-
-  // Create a timeline for each parent
-  parents.forEach((parent, index) => {
-    // Create a unique GSAP timeline for each parent
-    const tl = gsap.timeline({ paused: true, repeat: -1 });
+  // Create media query for desktop breakpoint
+  const mediaQuery = window.matchMedia("(min-width: 992px)");
+  
+  // Function to handle animations based on screen size
+  const handleScreenSize = (e) => {
+    const parents = document.querySelectorAll(".landing_list_item");
     
-    // Create a timeline for title block
-    const titleTl = gsap.timeline({ paused: true });
-
-    // Get the images within this specific parent
-    const images = parent.querySelectorAll(".image2, .image3, .image1");
-    
-    // Get the title block for this parent
-    const titleBlock = parent.querySelector(".work_title_block");
-
-    // Build timeline for this parent's images
-    images.forEach((image, i) => {
-      tl.to(image, { opacity: 1, duration: 0 }) // show image
-        .to(image, { opacity: 0, duration: 0, delay: 0.6 }); // hide image after delay
+    // Remove existing event listeners and reset styles when switching to mobile
+    parents.forEach((parent) => {
+      parent.removeEventListener("mouseenter", parent._mouseenterHandler);
+      parent.removeEventListener("mouseleave", parent._mouseleaveHandler);
+      
+      const titleBlock = parent.querySelector(".work_title_block");
+      const images = parent.querySelectorAll(".image1, .image2, .image3");
+      
+      if (!e.matches) { // Mobile view
+        gsap.set(titleBlock, {clearProps: "all"});
+        images.forEach(image => gsap.set(image, {clearProps: "all"}));
+      }
     });
 
-    // Build timeline for title block
-    titleTl.to(titleBlock, { opacity: 1, duration: 0 })
-           .to(titleBlock, { rotation: -20, duration: 0.4, ease: "power4.out" });
+    // Only set up animations for desktop
+    if (e.matches) {
+      console.log("Parent elements found:", parents.length);
 
-    // Add hover event listeners to this parent element
-    parent.addEventListener("mouseenter", () => {
-      console.log(`Mouse enter parent ${index} - playing timeline`);
-      tl.play();
-      titleTl.play();
-    });
+      parents.forEach((parent, index) => {
+        const tl = gsap.timeline({ paused: true, repeat: -1 });
+        const titleTl = gsap.timeline({ paused: true });
 
-    parent.addEventListener("mouseleave", () => {
-      console.log(`Mouse leave parent ${index} - resetting timeline`);
-      tl.pause(0);
-      titleTl.reverse();
-    });
-  });
+        const images = parent.querySelectorAll(".image1, .image2, .image3");
+        const titleBlock = parent.querySelector(".work_title_block");
+
+        images.forEach((image) => {
+          tl.to(image, { opacity: 1, duration: 0 })
+            .to(image, { opacity: 0, duration: 0, delay: 0.6 });
+        });
+
+        titleTl.to(titleBlock, { opacity: 1, duration: 0 })
+               .to(titleBlock, { rotation: -10, duration: 0.4, ease: "power4.out" });
+
+        // Store handlers to be able to remove them later
+        parent._mouseenterHandler = () => {
+          console.log(`Mouse enter parent ${index} - playing timeline`);
+          tl.play();
+          titleTl.play();
+        };
+
+        parent._mouseleaveHandler = () => {
+          console.log(`Mouse leave parent ${index} - resetting timeline`);
+          tl.pause(0);
+          titleTl.reverse();
+        };
+
+        parent.addEventListener("mouseenter", parent._mouseenterHandler);
+        parent.addEventListener("mouseleave", parent._mouseleaveHandler);
+      });
+    }
+  };
+
+  // Initial check
+  handleScreenSize(mediaQuery);
+  
+  // Add listener for screen size changes
+  mediaQuery.addListener(handleScreenSize);
 });
